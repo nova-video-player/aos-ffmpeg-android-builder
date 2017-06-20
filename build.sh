@@ -89,6 +89,7 @@ git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
 #here we source a file that sets CONFIG_LIBAV string to the config we want
 if [ -f "${FLAVOR}" ]; then
 	. "${FLAVOR}"
+	FLAVOR=$(echo "${FLAVOR}" | sed -E 's/config_(.+)\.sh/\1/')
 else
 	FLAVOR='default'
 	CONFIG_LIBAV=
