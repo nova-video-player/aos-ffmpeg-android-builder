@@ -6,13 +6,15 @@ CONFIG_LIBAV="\
 	--disable-avresample \
 	--disable-bzlib \
 	--disable-muxers \
-	--disable-demuxers \
 	--disable-bsfs \
-	--disable-protocols \
 	--disable-avdevice \
 	--disable-devices \
 	--disable-filters \
 	--disable-encoders \
+	--enable-demuxers \
+	--enable-parsers \
+	--enable-muxer=spdif \
+	--disable-protocols \
 	--disable-decoders \
 	\
 	--enable-decoder=cook \
@@ -53,31 +55,8 @@ CONFIG_LIBAV="\
 	--enable-decoder=mpeg2video \
 	--enable-decoder=theora \
 	\
-	--enable-demuxer=avi \
-	--enable-demuxer=matroska \
-	--enable-demuxer=rtsp \
-	--enable-demuxer=sdp \
-	--enable-demuxer=aac \
-	--enable-demuxer=mp3 \
-	--enable-demuxer=h261 \
-	--enable-demuxer=h263 \
-	--enable-demuxer=h264 \
-	--enable-demuxer=hevc \
-	--enable-demuxer=mpegts \
-	--enable-demuxer=mpegtsraw \
-	--enable-demuxer=mpegps \
-	--enable-demuxer=mpegvideo \
-	--enable-demuxer=wtv \
-	--enable-demuxer=ac3 \
-	--enable-demuxer=ogg \
-	--enable-demuxer=flv \
-	--enable-demuxer=dnxhd \
-	\
 	--enable-protocol=file \
 	--enable-protocol=http \
 	--enable-protocol=rtp \
 	--enable-protocol=tcp \
-	--enable-protocol=udp \
-	\
-	--enable-parsers \
-	--enable-muxer=spdif"
+	--enable-protocol=udp"
