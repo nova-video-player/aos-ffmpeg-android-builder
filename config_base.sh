@@ -21,7 +21,6 @@ CONFIG_LIBAV="\
 	--enable-decoder=flac \
 	--enable-decoder=aac \
 	--enable-decoder=aac_latm \
-	--enable-decoder=mp2 \
 	--enable-decoder=mp3 \
 	--enable-decoder=wavpack \
         --enable-decoder=tta \
@@ -52,7 +51,6 @@ CONFIG_LIBAV="\
 	--enable-decoder=wmv2 \
 	--enable-decoder=wmv3 \
 	--enable-decoder=vc1 \
-	--enable-decoder=mpeg2video \
 	--enable-decoder=theora \
 	\
 	--enable-protocol=file \
