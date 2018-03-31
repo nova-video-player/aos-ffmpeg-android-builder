@@ -83,7 +83,7 @@ git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
 
 "${NDK_PATH}"/build/tools/make_standalone_toolchain.py \
             --arch "${ARCH}" --api ${ANDROID_API} \
-            --stl libc++ --unified-headers \
+            --stl libc++ \
             --install-dir "${CROSS_DIR}" --force
 
 #here we source a file that sets CONFIG_LIBAV string to the config we want
