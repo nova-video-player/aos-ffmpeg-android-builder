@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 for ARCH in arm x86; do
 	if [ ${ARCH} == arm ] ; then
