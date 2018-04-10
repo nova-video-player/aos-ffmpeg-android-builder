@@ -12,5 +12,8 @@ for ARCH in arm x86; do
 	if [[ ! -d dist-mpeg2-${ABI} ]]; then
 		( . build.sh -a ${ARCH} -c config_mpeg2.sh )
 	fi
+	if [[ ! -d dist-full-${ABI} ]]; then
+		( . build.sh -a ${ARCH} -c config_full.sh )
+	fi
 
 done
