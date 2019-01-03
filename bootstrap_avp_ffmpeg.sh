@@ -1,17 +1,14 @@
 #!/bin/bash
 
-for ARCH in arm x86; do
-	if [ ${ARCH} == arm ] ; then
-		ABI=armeabi-v7a
-	else
-		ABI=x86
-	fi
-	if [[ ! -d dist-base-${ABI} ]]; then
-		( . build.sh -a ${ARCH} -c config_base.sh )
-	fi
-	if [[ ! -d dist-mpeg2-${ABI} ]]; then
-		( . build.sh -a ${ARCH} -c config_mpeg2.sh )
-	fi
+for ARCH in arm arm64 x86; do
+	case "${ARCH}" in
+    'arm')
+		ABI=armeabi-v7a ;;
+    'arm64')
+        ABI=arm64-v8a ;;
+    *)
+        ABI=${ARCH} ;;
+    esac
 	if [[ ! -d dist-full-${ABI} ]]; then
 		( . build.sh -a ${ARCH} -c config_full.sh )
 	fi

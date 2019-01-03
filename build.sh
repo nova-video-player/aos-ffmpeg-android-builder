@@ -36,11 +36,11 @@ fi
 
 if [ ! -d ffmpeg.git ]; then
 	#git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-	git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git --bare --depth=1 -b n3.3.8
+	git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git --bare --depth=1 -b n4.1
 fi
 
 FFMPEG_BARE_PATH=$(readlink -f ffmpeg.git)
-ANDROID_API=14
+ANDROID_API=21
 
 ARCH_CONFIG_OPT=
 
