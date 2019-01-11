@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for ARCH in arm arm64 x86; do
+for ARCH in arm arm64 x86 x86_64; do
 	case "${ARCH}" in
     'arm')
 		ABI=armeabi-v7a ;;
