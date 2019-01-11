@@ -1,0 +1,4 @@
+Name: libdav1d
+Description: AV1 decoding library
+Version: 0.1.0
+Libs: -ldav1d

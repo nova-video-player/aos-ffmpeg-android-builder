@@ -10,4 +10,5 @@ CONFIG_LIBAV="\
 	--enable-protocols \
 	--enable-demuxers \
 	--enable-parsers \
-	--enable-decoders"
+	--enable-decoders \
+    --enable-libdav1d"
