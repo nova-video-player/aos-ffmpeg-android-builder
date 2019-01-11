@@ -103,9 +103,12 @@ CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}-"
 
 mkdir -p "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}"
 
+export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
+
 ./configure --cross-prefix="${CROSS_PREFIX}" \
             --cc="${CROSS_PREFIX}clang" \
             --as="${CROSS_PREFIX}gcc" \
+            --pkg-config=pkg-config \
             --yasmexe="${CROSS_DIR}/bin/yasm" \
             --sysroot="${CROSS_DIR}/sysroot" --sysinclude="${CROSS_DIR}/sysroot/usr/include" \
             --enable-cross-compile --target-os=android \
