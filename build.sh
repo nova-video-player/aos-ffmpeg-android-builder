@@ -36,7 +36,9 @@ fi
 
 if [ ! -d ffmpeg.git ]; then
 	#git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-	git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git --bare --depth=1
+	#git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git ffmpeg.git --bare --depth=1
+	#FIXME: cannot do depth 1 to lock commit
+	git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git --bare
 fi
 
 FFMPEG_BARE_PATH=$(readlink -f ffmpeg.git)
@@ -105,6 +107,7 @@ echo "dav1d dir is at ${DAV1D_DIR}"
 pushd "${FFMPEG_DIR}"
 
 git clean -fdx
+git checkout 2e2b44baba575a33aa66796bc0a0f93070ab6c53
 
 CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}-"
 
