@@ -1,4 +1,4 @@
 Name: libdav1d
 Description: AV1 decoding library
-Version: 0.1.0
+Version: 99.9.9
 Libs: -ldav1d
