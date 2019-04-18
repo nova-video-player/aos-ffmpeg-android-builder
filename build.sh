@@ -107,7 +107,7 @@ echo "dav1d dir is at ${DAV1D_DIR}"
 pushd "${FFMPEG_DIR}"
 
 git clean -fdx
-git checkout 2e2b44baba575a33aa66796bc0a0f93070ab6c53
+#git checkout 2e2b44baba575a33aa66796bc0a0f93070ab6c53
 
 CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}-"
 
