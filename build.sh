@@ -36,9 +36,9 @@ fi
 
 if [ ! -d ffmpeg.git ]; then
 	#git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-	#git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git ffmpeg.git --bare --depth=1
+	git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git ffmpeg.git --bare --depth=1
 	#FIXME: cannot do depth 1 to lock commit
-	git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git --bare
+	#git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg.git --bare
 fi
 
 FFMPEG_BARE_PATH=$(readlink -f ffmpeg.git)

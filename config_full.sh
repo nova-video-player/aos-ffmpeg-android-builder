@@ -4,7 +4,6 @@ CONFIG_LIBAV="\
 	--disable-bsfs \
 	--disable-avdevice \
 	--disable-devices \
-	--disable-filters \
 	--disable-encoders \
 	--enable-muxer=spdif \
 	--enable-protocols \
