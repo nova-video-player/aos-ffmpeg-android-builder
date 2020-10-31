@@ -21,18 +21,10 @@ if [[ -z "${ARCH}" ]] ; then
 fi
 
 LOCAL_PATH=$(readlink -f .)
-NDK_PATH=$(dirname "$(which ndk-build)")
 
-if [ -z ${NDK_PATH} ] || [ ! -d ${NDK_PATH} ] || [ ${NDK_PATH} == . ]; then
-  if [ ! -d android-ndk-r20 ]; then
-    echo "downloading android ndk..."
-    wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zip
-    unzip android-ndk-r20-linux-x86_64.zip
-    rm -f android-ndk-r20-linux-x86_64.zip
-  fi
-  echo 'using integrated ndk'
-  NDK_PATH=$(readlink -f android-ndk-r20)
-fi
+[ ! -d "${ANDROID_HOME}/ndk" ] ${ANDROID_HOME}/tools/bin/sdkmanager --install ndk-bundle
+NDK_PATH=$(ls -d ${ANDROID_HOME}/ndk/* | sort -V | tail -n 1)
+echo NDK_PATH is ${NDK_PATH}
 
 if [ ! -d ffmpeg.git ]; then
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
