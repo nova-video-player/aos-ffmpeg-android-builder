@@ -3,9 +3,9 @@
 while getopts "a:c:" opt; do
   case $opt in
     a)
-	ARCH=$OPTARG ;;
+  ARCH=$OPTARG ;;
     c)
-	FLAVOR=$OPTARG ;;
+  FLAVOR=$OPTARG ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
       exit 1
@@ -14,31 +14,31 @@ while getopts "a:c:" opt; do
 done
 
 if [[ -z "${ARCH}" ]] ; then
-	echo 'You need to input arch with -a ARCH.'
-	echo 'Supported archs are:'
-	echo -e '\tarm arm64 mips mips64 x86 x86_64'
-	exit 1
+  echo 'You need to input arch with -a ARCH.'
+  echo 'Supported archs are:'
+  echo -e '\tarm arm64 mips mips64 x86 x86_64'
+  exit 1
 fi
 
 LOCAL_PATH=$(readlink -f .)
 NDK_PATH=$(dirname "$(which ndk-build)")
 
 if [ -z ${NDK_PATH} ] || [ ! -d ${NDK_PATH} ] || [ ${NDK_PATH} == . ]; then
-	if [ ! -d android-ndk-r20 ]; then
-		echo "downloading android ndk..."
-		wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zip
-		unzip android-ndk-r20-linux-x86_64.zip
-		rm -f android-ndk-r20-linux-x86_64.zip
-	fi
-	echo 'using integrated ndk'
-	NDK_PATH=$(readlink -f android-ndk-r20)
+  if [ ! -d android-ndk-r20 ]; then
+    echo "downloading android ndk..."
+    wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zip
+    unzip android-ndk-r20-linux-x86_64.zip
+    rm -f android-ndk-r20-linux-x86_64.zip
+  fi
+  echo 'using integrated ndk'
+  NDK_PATH=$(readlink -f android-ndk-r20)
 fi
 
 if [ ! -d ffmpeg.git ]; then
-	#git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-	git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n4.3.1
-	#FIXME: cannot do depth 1 to lock commit
-	#git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare
+  #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
+  git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n4.3.1
+  #FIXME: cannot do depth 1 to lock commit
+  #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare
 fi
 
 FFMPEG_BARE_PATH=$(readlink -f ffmpeg.git)
@@ -47,37 +47,36 @@ ANDROID_API=21
 ARCH_CONFIG_OPT=
 
 case "${ARCH}" in
-	'arm')
-		ARCH_TRIPLET='arm-linux-androideabi'
-		ABI='armeabi-v7a'
-		ARCH_CFLAGS='-march=armv7-a -mfpu=neon -mfloat-abi=softfp -mthumb'
-		ARCH_LDFLAGS='-march=armv7-a -Wl,--fix-cortex-a8' ;;
-	'arm64')
-		ARCH_TRIPLET='aarch64-linux-android'
-		ABI='arm64-v8a'
-		ANDROID_API=21 ;;
-        'mips')
-		ARCH_TRIPLET='mipsel-linux-android'
-		ABI='mips' ;;
-        'mips64')
-		ARCH_TRIPLET='mips64el-linux-android'
-		ABI='mips64'
-		ANDROID_API=21 ;;
-        'x86')
-		ARCH_TRIPLET='i686-linux-android'
-		ARCH_CONFIG_OPT='--disable-asm'
-		ARCH_CFLAGS='-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32'
-		ABI='x86' ;;
-        'x86_64')
-		ARCH_TRIPLET='x86_64-linux-android'
-		ABI='x86_64'
-		ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel'
-		ANDROID_API=21 ;;
-	*)
-		echo "Arch ${ARCH} is not supported."
-		exit 1 ;;
+  'arm')
+    ARCH_TRIPLET='arm-linux-androideabi'
+    ABI='armeabi-v7a'
+    ARCH_CFLAGS='-march=armv7-a -mfpu=neon -mfloat-abi=softfp -mthumb'
+    ARCH_LDFLAGS='-march=armv7-a -Wl,--fix-cortex-a8' ;;
+  'arm64')
+    ARCH_TRIPLET='aarch64-linux-android'
+    ABI='arm64-v8a'
+    ANDROID_API=21 ;;
+  'mips')
+    ARCH_TRIPLET='mipsel-linux-android'
+    ABI='mips' ;;
+  'mips64')
+    ARCH_TRIPLET='mips64el-linux-android'
+    ABI='mips64'
+    ANDROID_API=21 ;;
+  'x86')
+    ARCH_TRIPLET='i686-linux-android'
+    ARCH_CONFIG_OPT='--disable-asm'
+    ARCH_CFLAGS='-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32'
+    ABI='x86' ;;
+  'x86_64')
+    ARCH_TRIPLET='x86_64-linux-android'
+    ABI='x86_64'
+    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel'
+    ANDROID_API=21 ;;
+  *)
+    echo "Arch ${ARCH} is not supported."
+    exit 1 ;;
 esac
-
 
 CROSS_DIR="$(mktemp -d)"
 FFMPEG_DIR="$(mktemp -d)"
@@ -90,13 +89,12 @@ git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
 
 #here we source a file that sets CONFIG_LIBAV string to the config we want
 if [ -f "${FLAVOR}" ]; then
-	. "${FLAVOR}"
-	FLAVOR=$(echo "${FLAVOR}" | sed -E 's/config_(.+)\.sh/\1/')
+  . "${FLAVOR}"
+  FLAVOR=$(echo "${FLAVOR}" | sed -E 's/config_(.+)\.sh/\1/')
 else
-	FLAVOR='default'
-	CONFIG_LIBAV=
+  FLAVOR='default'
+  CONFIG_LIBAV=
 fi
-
 
 DAV1D_DIR=$(readlink -f ../dav1d-android-builder)
 DAV1D_LIB=${DAV1D_DIR}/build-${ABI}/src
@@ -132,7 +130,7 @@ export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
             --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB}" \
             --enable-shared --disable-static --disable-symver --disable-doc \
             ${CONFIG_LIBAV} > "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}/configure.log"
-make -j16 install
+make -j8 install
 
 popd
 
