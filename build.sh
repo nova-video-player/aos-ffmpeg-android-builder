@@ -98,11 +98,14 @@ else
 fi
 
 
-DAV1D_DIR=$(readlink -f ../dav1d-android-builder )
+DAV1D_DIR=$(readlink -f ../dav1d-android-builder)
 DAV1D_LIB=${DAV1D_DIR}/build-${ABI}/src
 
-echo "dav1d dir is at ${DAV1D_DIR}"
+OPUS_DIR=$(readlink -f ../opus-android-builder)
+OPUS_LIB=${OPUS_DIR}/lib/${ABI}
 
+echo "dav1d dir is at ${DAV1D_DIR}"
+echo "libopus dir is at ${OPUS_DIR}"
 
 pushd "${FFMPEG_DIR}"
 
@@ -125,8 +128,8 @@ export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
             --enable-cross-compile --target-os=android \
             --prefix="${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}" \
             --arch="${ARCH}" ${ARCH_CONFIG_OPT} \
-            --extra-cflags="${ARCH_CFLAGS} -fPIC -fPIE -DPIC -D__ANDROID_API__=${ANDROID_API} -I${DAV1D_DIR}/dav1d/include -I${DAV1D_DIR}/build-${ABI}/include -I${DAV1D_DIR}/build-${ABI}/include/dav1d" \
-            --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB}" \
+            --extra-cflags="${ARCH_CFLAGS} -fPIC -fPIE -DPIC -D__ANDROID_API__=${ANDROID_API} -I${DAV1D_DIR}/dav1d/include -I${DAV1D_DIR}/build-${ABI}/include -I${DAV1D_DIR}/build-${ABI}/include/dav1d  -I${OPUS_DIR}/opus/include" \
+            --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB}" \
             --enable-shared --disable-static --disable-symver --disable-doc \
             ${CONFIG_LIBAV} > "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}/configure.log"
 make -j16 install

@@ -1,0 +1,6 @@
+Name: Opus
+Description: Opus IETF audio codec
+URL: https://opus-codec.org/
+Version: 99.9.9
+Libs: -lopus
+Libs.private: -lm
