@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 6a7a85c..b9efea6 100755
+--- a/configure
++++ b/configure
+@@ -6245,7 +6245,7 @@ enabled libopenjpeg       && { check_pkg_config libopenjpeg "libopenjp2 >= 2.1.0
+ enabled libopenmpt        && require_pkg_config libopenmpt "libopenmpt >= 0.2.6557" libopenmpt/libopenmpt.h openmpt_module_create -lstdc++ && append libopenmpt_extralibs "-lstdc++"
+ enabled libopus           && {
+     enabled libopus_decoder && {
+-        require_pkg_config libopus opus opus_multistream.h opus_multistream_decoder_create
++        require_pkg_config libopus opus opus_multistream.h opus_multistream_decoder_create "$libm_extralibs"
+     }
+     enabled libopus_encoder && {
+         require_pkg_config libopus opus opus_multistream.h opus_multistream_surround_encoder_create

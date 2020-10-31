@@ -108,6 +108,7 @@ pushd "${FFMPEG_DIR}"
 
 git clean -fdx
 #git checkout 2e2b44baba575a33aa66796bc0a0f93070ab6c53
+git apply "${LOCAL_PATH}/config_opus.patch"
 
 CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}-"
 
