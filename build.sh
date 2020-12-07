@@ -41,43 +41,32 @@ ARCH_CONFIG_OPT=
 case "${ARCH}" in
   'arm')
     ARCH_TRIPLET='arm-linux-androideabi'
+    CLANG_TRIPLET='armv7a-linux-androideabi'
     ABI='armeabi-v7a'
     ARCH_CFLAGS='-march=armv7-a -mfpu=neon -mfloat-abi=softfp -mthumb'
     ARCH_LDFLAGS='-march=armv7-a -Wl,--fix-cortex-a8' ;;
   'arm64')
     ARCH_TRIPLET='aarch64-linux-android'
-    ABI='arm64-v8a'
-    ANDROID_API=21 ;;
-  'mips')
-    ARCH_TRIPLET='mipsel-linux-android'
-    ABI='mips' ;;
-  'mips64')
-    ARCH_TRIPLET='mips64el-linux-android'
-    ABI='mips64'
-    ANDROID_API=21 ;;
+    CLANG_TRIPLET=${ARCH_TRIPLET}
+    ABI='arm64-v8a' ;;
   'x86')
     ARCH_TRIPLET='i686-linux-android'
+    CLANG_TRIPLET=${ARCH_TRIPLET}
     ARCH_CONFIG_OPT='--disable-asm'
     ARCH_CFLAGS='-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32'
     ABI='x86' ;;
   'x86_64')
     ARCH_TRIPLET='x86_64-linux-android'
+    CLANG_TRIPLET=${ARCH_TRIPLET}
     ABI='x86_64'
-    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel'
-    ANDROID_API=21 ;;
+    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel' ;;
   *)
     echo "Arch ${ARCH} is not supported."
     exit 1 ;;
 esac
 
-CROSS_DIR="$(mktemp -d)"
 FFMPEG_DIR="$(mktemp -d)"
 git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
-
-"${NDK_PATH}"/build/tools/make_standalone_toolchain.py \
-            --arch "${ARCH}" --api ${ANDROID_API} \
-            --stl libc++ \
-            --install-dir "${CROSS_DIR}" --force
 
 #here we source a file that sets CONFIG_LIBAV string to the config we want
 if [ -f "${FLAVOR}" ]; then
@@ -103,15 +92,16 @@ git clean -fdx
 #git checkout 2e2b44baba575a33aa66796bc0a0f93070ab6c53
 git apply "${LOCAL_PATH}/config_opus.patch"
 
-CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}-"
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+CROSS_DIR=$NDK_PATH/toolchains/llvm/prebuilt/${OS}-x86_64
+CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}"
 
 mkdir -p "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}"
 
 export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
 
-./configure --cross-prefix="${CROSS_PREFIX}" \
-            --cc="${CROSS_PREFIX}clang" \
-            --as="${CROSS_PREFIX}gcc" \
+./configure --cross-prefix="${CROSS_PREFIX}-" \
+            --cc="${CROSS_DIR}/bin/${CLANG_TRIPLET}${ANDROID_API}-clang" \
             --pkg-config=pkg-config \
             --yasmexe="${CROSS_DIR}/bin/yasm" \
             --sysroot="${CROSS_DIR}/sysroot" --sysinclude="${CROSS_DIR}/sysroot/usr/include" \
@@ -126,7 +116,6 @@ make -j8 install
 
 popd
 
-rm -Rf "${CROSS_DIR}"
 cp -R "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}"  "${LOCAL_PATH}/"
 rm -Rf "${FFMPEG_DIR}"
 
