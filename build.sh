@@ -20,7 +20,17 @@ if [[ -z "${ARCH}" ]] ; then
   exit 1
 fi
 
-LOCAL_PATH=$(readlink -f .)
+case `uname` in
+  Linux)
+    READLINK=readlink
+  ;;
+  Darwin)
+    # assumes brew install coreutils in order to support readlink -f on macOS
+    READLINK=greadlink
+  ;;
+esac
+
+LOCAL_PATH=$($READLINK -f .)
 
 # android sdk directory is changing
 [ -n "${ANDROID_HOME}" ] && androidSdk=${ANDROID_HOME}
@@ -39,7 +49,7 @@ if [ ! -d ffmpeg.git ]; then
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare
 fi
 
-FFMPEG_BARE_PATH=$(readlink -f ffmpeg.git)
+FFMPEG_BARE_PATH=$($READLINK -f ffmpeg.git)
 ANDROID_API=21
 
 ARCH_CONFIG_OPT=
@@ -83,10 +93,10 @@ else
   CONFIG_LIBAV=
 fi
 
-DAV1D_DIR=$(readlink -f ../dav1d-android-builder)
+DAV1D_DIR=$($READLINK -f ../dav1d-android-builder)
 DAV1D_LIB=${DAV1D_DIR}/build-${ABI}/src
 
-OPUS_DIR=$(readlink -f ../opus-android-builder)
+OPUS_DIR=$($READLINK -f ../opus-android-builder)
 OPUS_LIB=${OPUS_DIR}/lib/${ABI}
 
 echo "dav1d dir is at ${DAV1D_DIR}"
