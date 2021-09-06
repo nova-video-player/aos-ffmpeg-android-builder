@@ -23,10 +23,12 @@ fi
 case `uname` in
   Linux)
     READLINK=readlink
+    SED=sed
   ;;
   Darwin)
     # assumes brew install coreutils in order to support readlink -f on macOS
     READLINK=greadlink
+    SED=gsed
   ;;
 esac
 
@@ -87,7 +89,7 @@ git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
 #here we source a file that sets CONFIG_LIBAV string to the config we want
 if [ -f "${FLAVOR}" ]; then
   . "${FLAVOR}"
-  FLAVOR=$(echo "${FLAVOR}" | sed -E 's/config_(.+)\.sh/\1/')
+  FLAVOR=$(echo "${FLAVOR}" | $SED -E 's/config_(.+)\.sh/\1/')
 else
   FLAVOR='default'
   CONFIG_LIBAV=
@@ -106,7 +108,9 @@ pushd "${FFMPEG_DIR}"
 
 git clean -fdx
 #git checkout 2e2b44baba575a33aa66796bc0a0f93070ab6c53
-git apply "${LOCAL_PATH}/config_opus.patch"
+#git apply "${LOCAL_PATH}/config_opus.patch"
+cat "${LOCAL_PATH}/config_opus.patch" | patch -p 1
+
 
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 CROSS_DIR=$NDK_PATH/toolchains/llvm/prebuilt/${OS}-x86_64
