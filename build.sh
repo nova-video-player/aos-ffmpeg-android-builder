@@ -46,7 +46,8 @@ echo NDK_PATH is ${NDK_PATH}
 
 if [ ! -d ffmpeg.git ]; then
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-  git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n4.4.1
+  #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n4.4.1
+  git clone https://github.com/nova-video-player/FFmpeg ffmpeg.git --bare --depth=1 -b nova
   #FIXME: cannot do depth 1 to lock commit
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare
 fi
