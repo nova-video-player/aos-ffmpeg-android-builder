@@ -39,9 +39,14 @@ LOCAL_PATH=$($READLINK -f .)
 [ -n "${ANDROID_SDK_ROOT}" ] && androidSdk=${ANDROID_SDK_ROOT}
 # multiple sdkmanager paths
 export PATH=${androidSdk}/cmdline-tools/tools/bin:${androidSdk}/tools/bin:$PATH
-[ ! -d "${androidSdk}/ndk-bundle" -a ! -d "${androidSdk}/ndk" ] && sdkmanager ndk-bundle
-[ -d "${androidSdk}/ndk" ] && NDK_PATH=$(ls -d ${androidSdk}/ndk/* | sort -V | tail -n 1)
+if [ ! -d "${androidSdk}/ndk-bundle" -a ! -d "${androidSdk}/ndk" ]
+then
+  ndk=$(pkg="ndk;$NDKVER"; sdkmanager --list | grep ${pkg} | sed "s/^.*\($pkg\.[0-9\.]*\) .*$/\1/g" | tail -n 1)
+  yes | sdkmanager "${ndk}" > /dev/null
+  echo NDK $ndk installed
+fi
 [ -d "${androidSdk}/ndk-bundle" ] && NDK_PATH=${androidSdk}/ndk-bundle
+[ -d "${androidSdk}/ndk" ] && NDK_PATH=$(ls -d ${androidSdk}/ndk/* | sort -V | tail -n 1)
 echo NDK_PATH is ${NDK_PATH}
 
 if [ ! -d ffmpeg.git ]; then
@@ -72,19 +77,21 @@ case "${ARCH}" in
     ARCH_TRIPLET='i686-linux-android'
     CLANG_TRIPLET=${ARCH_TRIPLET}
     ARCH_CONFIG_OPT='--disable-asm'
-    ARCH_CFLAGS='-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32'
+    ARCH_CFLAGS='-march=i686 -mtune=i686 -mssse3 -mfpmath=sse -m32'
     ABI='x86' ;;
   'x86_64')
     ARCH_TRIPLET='x86_64-linux-android'
     CLANG_TRIPLET=${ARCH_TRIPLET}
     ABI='x86_64'
-    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel' ;;
+    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=x86-64' ;;
   *)
     echo "Arch ${ARCH} is not supported."
     exit 1 ;;
 esac
 
 FFMPEG_DIR="$(mktemp -d)"
+#FFMPEG_DIR="$PWD/ffmpeg-$ABI"
+mkdir -p $FFMPEG_DIR
 git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
 
 #here we source a file that sets CONFIG_LIBAV string to the config we want
@@ -123,6 +130,10 @@ export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
 
 ./configure --cross-prefix="${CROSS_PREFIX}-" \
             --cc="${CROSS_DIR}/bin/${CLANG_TRIPLET}${ANDROID_API}-clang" \
+            --nm="${CROSS_DIR}/bin/llvm-nm" \
+            --ar="${CROSS_DIR}/bin/llvm-ar" \
+            --ranlib="${CROSS_DIR}/bin/llvm-ranlib" \
+            --strip="${CROSS_DIR}/bin/llvm-strip" \
             --pkg-config=pkg-config \
             --yasmexe="${CROSS_DIR}/bin/yasm" \
             --sysroot="${CROSS_DIR}/sysroot" --sysinclude="${CROSS_DIR}/sysroot/usr/include" \
