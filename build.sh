@@ -36,9 +36,10 @@ LOCAL_PATH=$($READLINK -f .)
 
 # android sdk directory is changing
 [ -n "${ANDROID_HOME}" ] && androidSdk=${ANDROID_HOME}
+[ -n "${ANDROID_SDK}" ] && androidSdk=${ANDROID_SDK}
 [ -n "${ANDROID_SDK_ROOT}" ] && androidSdk=${ANDROID_SDK_ROOT}
 # multiple sdkmanager paths
-export PATH=${androidSdk}/cmdline-tools/tools/bin:${androidSdk}/tools/bin:$PATH
+export PATH=${androidSdk}/cmdline-tools/latest/bin:${androidSdk}/cmdline-tools/tools/bin:${androidSdk}/tools/bin:$PATH
 if [ ! -d "${androidSdk}/ndk-bundle" -a ! -d "${androidSdk}/ndk" ]
 then
   ndk=$(pkg="ndk;$NDKVER"; sdkmanager --list | grep ${pkg} | sed "s/^.*\($pkg\.[0-9\.]*\) .*$/\1/g" | tail -n 1)
