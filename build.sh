@@ -36,9 +36,10 @@ LOCAL_PATH=$($READLINK -f .)
 
 # android sdk directory is changing
 [ -n "${ANDROID_HOME}" ] && androidSdk=${ANDROID_HOME}
+[ -n "${ANDROID_SDK}" ] && androidSdk=${ANDROID_SDK}
 [ -n "${ANDROID_SDK_ROOT}" ] && androidSdk=${ANDROID_SDK_ROOT}
 # multiple sdkmanager paths
-export PATH=${androidSdk}/cmdline-tools/tools/bin:${androidSdk}/tools/bin:$PATH
+export PATH=${androidSdk}/cmdline-tools/latest/bin:${androidSdk}/cmdline-tools/tools/bin:${androidSdk}/tools/bin:$PATH
 if [ ! -d "${androidSdk}/ndk-bundle" -a ! -d "${androidSdk}/ndk" ]
 then
   ndk=$(pkg="ndk;$NDKVER"; sdkmanager --list | grep ${pkg} | sed "s/^.*\($pkg\.[0-9\.]*\) .*$/\1/g" | tail -n 1)
@@ -109,8 +110,12 @@ DAV1D_LIB=${DAV1D_DIR}/build-${ABI}/src
 OPUS_DIR=$($READLINK -f ../opus-android-builder)
 OPUS_LIB=${OPUS_DIR}/lib/${ABI}
 
+OPENSSL_DIR=$($READLINK -f ../openssl-android-builder)
+OPENSSL_LIB=${OPENSSL_DIR}/dist-${ABI}/lib
+
 echo "dav1d dir is at ${DAV1D_DIR}"
 echo "libopus dir is at ${OPUS_DIR}"
+echo "openssl dir is at ${OPENSSL_DIR}"
 
 pushd "${FFMPEG_DIR}"
 
@@ -140,8 +145,8 @@ export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
             --enable-cross-compile --target-os=android \
             --prefix="${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}" \
             --arch="${ARCH}" ${ARCH_CONFIG_OPT} \
-            --extra-cflags="${ARCH_CFLAGS} -fPIC -fPIE -DPIC -D__ANDROID_API__=${ANDROID_API} -I${DAV1D_DIR}/dav1d/include -I${DAV1D_DIR}/build-${ABI}/include -I${DAV1D_DIR}/build-${ABI}/include/dav1d  -I${OPUS_DIR}/opus/include" \
-            --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB}" \
+            --extra-cflags="${ARCH_CFLAGS} -fPIC -fPIE -DPIC -D__ANDROID_API__=${ANDROID_API} -I${DAV1D_DIR}/dav1d/include -I${DAV1D_DIR}/build-${ABI}/include -I${DAV1D_DIR}/build-${ABI}/include/dav1d  -I${OPUS_DIR}/opus/include -I${OPENSSL_DIR}/dist-${ABI}/include" \
+            --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB} -L${OPENSSL_LIB}" \
             --enable-shared --disable-static --disable-symver --disable-doc \
             ${CONFIG_LIBAV} > "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}/configure.log"
 make -j8 install
