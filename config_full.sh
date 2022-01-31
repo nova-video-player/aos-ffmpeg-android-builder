@@ -10,4 +10,4 @@ CONFIG_LIBAV="\
 	--enable-demuxers \
 	--enable-parsers \
 	--enable-decoders \
-    --enable-libdav1d --enable-libopus"
+    --enable-libdav1d --enable-libopus --enable-openssl"
