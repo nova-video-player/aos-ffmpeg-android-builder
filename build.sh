@@ -20,7 +20,7 @@ if [[ -z "${ARCH}" ]] ; then
   exit 1
 fi
 
-source ./install.sh
+source ./setup.sh
 
 LOCAL_PATH=$($READLINK -f .)
 
