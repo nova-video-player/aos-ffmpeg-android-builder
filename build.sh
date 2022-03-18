@@ -25,9 +25,7 @@ source ./setup.sh
 LOCAL_PATH=$($READLINK -f .)
 
 if [ ! -d ffmpeg.git ]; then
-  #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-  #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n4.4.1
-  git clone https://github.com/nova-video-player/FFmpeg ffmpeg.git --bare --depth=1 -b nova
+  git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n5.0
   #FIXME: cannot do depth 1 to lock commit
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare
 fi
