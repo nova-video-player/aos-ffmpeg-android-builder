@@ -55,7 +55,7 @@ export ANDROID_NDK_ROOT=${NDK_PATH}
 if [ ! -d "${androidSdk}/cmake" ]
 then
   cmake=$(pkg="cmake"; sdkmanager --list | grep ${pkg} | sed "s/^.*\($pkg;[0-9\.]*\).*$/\1/g" | head -n 1)
-  sdkmanager "${cmake}"
+  yes | sdkmanager "${cmake}" > /dev/null
 fi
 # latest cmake
 [ -d "${androidSdk}/cmake" ] && CMAKE_PATH=$(ls -d ${androidSdk}/cmake/* | sort -V | tail -n 1)
