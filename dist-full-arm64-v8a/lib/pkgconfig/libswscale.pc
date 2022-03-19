@@ -1,0 +1,14 @@
+prefix=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.GGUPJb9N/dist-full-arm64-v8a
+exec_prefix=${prefix}
+libdir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.GGUPJb9N/dist-full-arm64-v8a/lib
+includedir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.GGUPJb9N/dist-full-arm64-v8a/include
+
+Name: libswscale
+Description: FFmpeg image rescaling library
+Version: 6.4.100
+Requires: 
+Requires.private: libavutil >= 57.17.100
+Conflicts:
+Libs: -L${libdir}  -lswscale 
+Libs.private: -lm
+Cflags: -I${includedir}
