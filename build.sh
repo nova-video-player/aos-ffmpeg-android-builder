@@ -25,7 +25,7 @@ source ../../AVP/android-setup-light.sh
 LOCAL_PATH=$($READLINK -f .)
 
 if [ ! -d ffmpeg.git ]; then
-  git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n5.0
+  git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare --depth=1 -b n5.0.1
   #FIXME: cannot do depth 1 to lock commit
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg.git --bare
 fi
