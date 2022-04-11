@@ -1,7 +1,7 @@
-prefix=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.dJNc6QoE/dist-full-x86
+prefix=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.NcHYy9l5/dist-full-x86
 exec_prefix=${prefix}
-libdir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.dJNc6QoE/dist-full-x86/lib
-includedir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.dJNc6QoE/dist-full-x86/include
+libdir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.NcHYy9l5/dist-full-x86/lib
+includedir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.NcHYy9l5/dist-full-x86/include
 
 Name: libswresample
 Description: FFmpeg audio resampling library
@@ -10,5 +10,5 @@ Requires:
 Requires.private: libavutil >= 57.17.100
 Conflicts:
 Libs: -L${libdir}  -lswresample 
-Libs.private: -lm
+Libs.private: -lm -latomic
 Cflags: -I${includedir}

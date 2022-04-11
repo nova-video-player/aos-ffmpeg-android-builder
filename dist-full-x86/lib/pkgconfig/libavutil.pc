@@ -1,7 +1,7 @@
-prefix=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.dJNc6QoE/dist-full-x86
+prefix=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.NcHYy9l5/dist-full-x86
 exec_prefix=${prefix}
-libdir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.dJNc6QoE/dist-full-x86/lib
-includedir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.dJNc6QoE/dist-full-x86/include
+libdir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.NcHYy9l5/dist-full-x86/lib
+includedir=/var/folders/06/k5mgsnwn3lvb2g1hh_q5g1mc0000gn/T/tmp.NcHYy9l5/dist-full-x86/include
 
 Name: libavutil
 Description: FFmpeg utility library
@@ -10,5 +10,5 @@ Requires:
 Requires.private: 
 Conflicts:
 Libs: -L${libdir}  -lavutil 
-Libs.private: -pthread -lm
+Libs.private: -pthread -lm -latomic
 Cflags: -I${includedir}
