@@ -123,7 +123,7 @@ export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
             --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB} -L${OPENSSL_LIB}" \
             --enable-shared --disable-static --disable-symver --disable-doc \
             ${CONFIG_LIBAV} > "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}/configure.log"
-make -j8 install
+make -j${CORES} install
 
 popd
 
