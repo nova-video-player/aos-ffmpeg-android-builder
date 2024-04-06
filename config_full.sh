@@ -1,13 +1,31 @@
 CONFIG_LIBAV="\
+	--disable-ffmpeg \
+	--disable-ffplay \
+	--disable-ffprobe \
+	--disable-doc \
+	--disable-htmlpages \
+	--disable-manpages \
+	--disable-podpages \
+	--disable-txtpages \
+	--disable-programs \
+	--disable-swresample \
+	--disable-swscale \
+	--disable-postproc \
 	--disable-bzlib \
 	--disable-muxers \
-	--disable-bsfs \
 	--disable-avdevice \
 	--disable-devices \
-	--disable-encoders \
-	--enable-muxer=spdif \
-	--enable-protocols \
+	--enable-filters \
+	--disable-protocols \
 	--enable-demuxers \
 	--enable-parsers \
+	--enable-muxer=spdif \
+	--disable-encoders \
 	--enable-decoders \
-    --enable-libdav1d --enable-libopus --enable-openssl"
+	--disable-v4l2-m2m \
+	--enable-libdav1d \
+	--enable-libopus \
+	--disable-vulkan \
+	--enable-openssl \
+	"
+
