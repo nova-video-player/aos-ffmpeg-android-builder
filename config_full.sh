@@ -1,3 +1,4 @@
+# disable--protocols does not work
 CONFIG_LIBAV="\
 	--disable-ffmpeg \
 	--disable-ffplay \
@@ -13,10 +14,9 @@ CONFIG_LIBAV="\
 	--disable-postproc \
 	--disable-bzlib \
 	--disable-muxers \
+	--disable-bsfs \
 	--disable-avdevice \
 	--disable-devices \
-	--enable-filters \
-	--disable-protocols \
 	--enable-demuxers \
 	--enable-parsers \
 	--enable-muxer=spdif \
@@ -28,4 +28,3 @@ CONFIG_LIBAV="\
 	--disable-vulkan \
 	--enable-openssl \
 	"
-
