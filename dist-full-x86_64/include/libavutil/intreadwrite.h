@@ -72,6 +72,8 @@ typedef union {
 #   include "mips/intreadwrite.h"
 #elif ARCH_PPC
 #   include "ppc/intreadwrite.h"
+#elif ARCH_TOMI
+#   include "tomi/intreadwrite.h"
 #elif ARCH_X86
 #   include "x86/intreadwrite.h"
 #endif
@@ -213,7 +215,7 @@ typedef union {
  * by per-arch headers.
  */
 
-#if defined(__GNUC__) || defined(__clang__)
+#if defined(__GNUC__)
 
 union unaligned_64 { uint64_t l; } __attribute__((packed)) av_alias;
 union unaligned_32 { uint32_t l; } __attribute__((packed)) av_alias;
