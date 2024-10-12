@@ -10,7 +10,7 @@ CONFIG_LIBAV="\
 	--disable-txtpages \
 	--disable-programs \
 	--disable-swresample \
-	--disable-swscale \
+	--enable-swscale \
 	--disable-postproc \
 	--disable-bzlib \
 	--disable-muxers \
