@@ -9,7 +9,7 @@ CONFIG_LIBAV="\
 	--disable-podpages \
 	--disable-txtpages \
 	--disable-programs \
-	--disable-swresample \
+	--enable-swresample \
 	--enable-swscale \
 	--disable-postproc \
 	--disable-bzlib \
