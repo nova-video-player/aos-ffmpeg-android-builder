@@ -11,7 +11,6 @@ CONFIG_LIBAV="\
 	--disable-programs \
 	--enable-swresample \
 	--enable-swscale \
-	--disable-postproc \
 	--disable-bzlib \
 	--disable-muxers \
 	--disable-bsfs \
@@ -21,6 +20,7 @@ CONFIG_LIBAV="\
 	--enable-parsers \
 	--enable-muxer=spdif \
 	--disable-encoders \
+	--enable-encoder=ac3 \
 	--enable-decoders \
 	--disable-v4l2-m2m \
 	--enable-libdav1d \
