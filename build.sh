@@ -43,22 +43,25 @@ case "${ARCH}" in
     CLANG_TRIPLET='armv7a-linux-androideabi'
     ABI='armeabi-v7a'
     ARCH_CFLAGS='-march=armv7-a -mfpu=neon -mfloat-abi=softfp -mthumb'
-    ARCH_LDFLAGS='-march=armv7-a -Wl,--fix-cortex-a8' ;;
+    ARCH_LDFLAGS='-march=armv7-a -Wl,--fix-cortex-a8,-z,max-page-size=16384' ;;
   'arm64')
     ARCH_TRIPLET='aarch64-linux-android'
     CLANG_TRIPLET=${ARCH_TRIPLET}
-    ABI='arm64-v8a' ;;
+    ABI='arm64-v8a'
+    ARCH_LDFLAGS='-Wl,-z,max-page-size=16384' ;;
   'x86')
     ARCH_TRIPLET='i686-linux-android'
     CLANG_TRIPLET=${ARCH_TRIPLET}
     ARCH_CONFIG_OPT='--disable-asm'
     ARCH_CFLAGS='-march=i686 -mtune=i686 -mssse3 -mfpmath=sse -m32'
+    ARCH_LDFLAGS='-Wl,-z,max-page-size=16384'
     ABI='x86' ;;
   'x86_64')
     ARCH_TRIPLET='x86_64-linux-android'
     CLANG_TRIPLET=${ARCH_TRIPLET}
     ABI='x86_64'
-    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=x86-64' ;;
+    ARCH_CFLAGS='-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=x86-64'
+    ARCH_LDFLAGS='-Wl,-z,max-page-size=16384' ;;
   *)
     echo "Arch ${ARCH} is not supported."
     exit 1 ;;
