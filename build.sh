@@ -23,6 +23,7 @@ fi
 source ../../AVP/android-setup-light.sh
 
 LOCAL_PATH=$($READLINK -f .)
+PREBUILT_DIR=$($READLINK -f ../prebuilt/ffmpeg)
 
 if [ ! -d ffmpeg.git ]; then
   #git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
@@ -67,11 +68,6 @@ case "${ARCH}" in
     exit 1 ;;
 esac
 
-FFMPEG_DIR="$(mktemp -d)"
-#FFMPEG_DIR="$PWD/ffmpeg-$ABI"
-mkdir -p $FFMPEG_DIR
-git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
-
 #here we source a file that sets CONFIG_LIBAV string to the config we want
 if [ -f "${FLAVOR}" ]; then
   . "${FLAVOR}"
@@ -81,14 +77,28 @@ else
   CONFIG_LIBAV=
 fi
 
+if [ -f "${PREBUILT_DIR}/dist-${FLAVOR}-${ABI}/lib/libavcodec.so" ]; then
+  echo "Already built for ${FLAVOR}-${ABI}"
+  exit 0
+fi
+
+FFMPEG_DIR="$(mktemp -d)"
+#FFMPEG_DIR="$PWD/ffmpeg-$ABI"
+mkdir -p $FFMPEG_DIR
+git clone "${FFMPEG_BARE_PATH}" "${FFMPEG_DIR}"
+
 DAV1D_DIR=$($READLINK -f ../dav1d-android-builder)
-DAV1D_LIB=${DAV1D_DIR}/build-${ABI}/src
+DAV1D_PREBUILT=$($READLINK -f ../prebuilt/dav1d)
+DAV1D_LIB=${DAV1D_PREBUILT}/lib/${ABI}
 
 OPUS_DIR=$($READLINK -f ../opus-android-builder)
-OPUS_LIB=${OPUS_DIR}/lib/${ABI}
+OPUS_LIB=$($READLINK -f ../prebuilt/opus)/lib/${ABI}
 
-OPENSSL_DIR=$($READLINK -f ../openssl-android-builder)
-OPENSSL_LIB=${OPENSSL_DIR}/dist-${ABI}/lib
+OPENSSL_PREBUILT=$($READLINK -f ../prebuilt/openssl)
+OPENSSL_LIB=${OPENSSL_PREBUILT}/dist-${ABI}/lib
+
+LIBMYSOFA_PREBUILT=$($READLINK -f ../prebuilt/libmysofa)
+LIBMYSOFA_LIB=${LIBMYSOFA_PREBUILT}/lib/${ABI}
 
 echo "dav1d dir is at ${DAV1D_DIR}"
 echo "libopus dir is at ${OPUS_DIR}"
@@ -106,9 +116,9 @@ OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 CROSS_DIR=$NDK_PATH/toolchains/llvm/prebuilt/${OS}-x86_64
 CROSS_PREFIX="${CROSS_DIR}/bin/${ARCH_TRIPLET}"
 
-mkdir -p "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}"
+mkdir -p "${PREBUILT_DIR}/dist-${FLAVOR}-${ABI}"
 
-export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
+export PKG_CONFIG_LIBDIR=${LOCAL_PATH}:${OPENSSL_PREBUILT}/dist-${ABI}/lib/pkgconfig
 
 ./configure --cross-prefix="${CROSS_PREFIX}-" \
             --cc="${CROSS_DIR}/bin/${CLANG_TRIPLET}${ANDROID_API}-clang" \
@@ -119,16 +129,15 @@ export PKG_CONFIG_LIBDIR=${LOCAL_PATH}
             --pkg-config=pkg-config \
             --sysroot="${CROSS_DIR}/sysroot" --sysinclude="${CROSS_DIR}/sysroot/usr/include" \
             --enable-cross-compile --target-os=android \
-            --prefix="${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}" \
+            --prefix="${PREBUILT_DIR}/dist-${FLAVOR}-${ABI}" \
             --arch="${ARCH}" ${ARCH_CONFIG_OPT} \
-            --extra-cflags="${ARCH_CFLAGS} -fPIC -fPIE -DPIC -I${DAV1D_DIR}/dav1d/include -I${DAV1D_DIR}/build-${ABI}/include -I${DAV1D_DIR}/build-${ABI}/include/dav1d  -I${OPUS_DIR}/opus/include -I${OPENSSL_DIR}/dist-${ABI}/include" \
-            --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB} -L${OPENSSL_LIB}" \
+            --extra-cflags="${ARCH_CFLAGS} -fPIC -fPIE -DPIC -I${DAV1D_DIR}/dav1d/include -I${DAV1D_PREBUILT}/include -I${DAV1D_PREBUILT}/include/dav1d -I${OPUS_DIR}/opus/include -I${OPENSSL_PREBUILT}/dist-${ABI}/include -I${LIBMYSOFA_PREBUILT}/include" \
+            --extra-ldflags="${ARCH_LDFLAGS} -fPIE -pie -L${DAV1D_LIB} -L${OPUS_LIB} -L${OPENSSL_LIB} -L${LIBMYSOFA_LIB}" \
             --enable-shared --disable-static --disable-symver --disable-doc \
-            ${CONFIG_LIBAV} > "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}/configure.log"
+            ${CONFIG_LIBAV} > "${PREBUILT_DIR}/dist-${FLAVOR}-${ABI}/configure.log"
 make -j${CORES} install
 
 popd
 
-cp -R "${FFMPEG_DIR}/dist-${FLAVOR}-${ABI}"  "${LOCAL_PATH}/"
 rm -Rf "${FFMPEG_DIR}"
 
